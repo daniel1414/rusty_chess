@@ -5,10 +5,21 @@ pub struct LobbyState {
 
 }
 
+impl LobbyState {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
+
 pub struct MatchState {
 
 }
 
+impl MatchState {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
 
 #[derive(Resource)]
 pub enum GameState {
