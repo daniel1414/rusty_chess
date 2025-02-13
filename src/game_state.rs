@@ -30,7 +30,7 @@ impl GameState {
         Self::Match( MatchState::new(PlayerColor::Black) )
     }
 
-    pub fn draw(&self, game: &mut Game<GameState>, game_state: &GameState) {
+    pub fn draw(&self, game: &mut Game<GameState>) {
         let base_path = Path::new("sprite/chess");
 
         // Board frame
@@ -39,7 +39,7 @@ impl GameState {
         sprite.scale = 0.38;
         sprite.translation += BOARD_OFFSET;
 
-        if let GameState::Match(state) = game_state {
+        if let GameState::Match(state) = self {
             if state.player_color == PlayerColor::Black {
                 sprite.rotation = LEFT;
             }
@@ -51,7 +51,7 @@ impl GameState {
         sprite.scale = 0.5;
         sprite.translation += BOARD_OFFSET;
 
-        match game_state {
+        match self {
             GameState::Lobby(_) => todo!(),
             GameState::Match(match_state) => {
 

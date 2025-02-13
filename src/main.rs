@@ -15,7 +15,7 @@ fn main() {
     let initial_game_state = GameState::new();
     
     let mut game = Game::new();
-    initial_game_state.draw(&mut game, &initial_game_state);
+    initial_game_state.draw(&mut game);
 
     game.add_logic(game_logic);
     game.run(initial_game_state);
