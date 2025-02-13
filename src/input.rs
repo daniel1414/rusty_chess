@@ -1,6 +1,6 @@
 use rusty_engine::prelude::*;
 
-use crate::{game_state::{GameState, LobbyState}, match_state::MatchState};
+use crate::{game_state::GameState, game_match::match_state::MatchState, game_lobby::lobby_state::LobbyState};
 
 pub fn handle_input(engine: &mut Engine, state: &mut GameState) {
     match state {
@@ -9,13 +9,13 @@ pub fn handle_input(engine: &mut Engine, state: &mut GameState) {
     };
 }
 
-fn handle_lobby_input(engine: &mut Engine, state: &mut LobbyState) {
+fn handle_lobby_input(engine: &mut Engine, _: &mut LobbyState) {
     for mouse_event in &engine.mouse_button_events {
         println!("{:?}", mouse_event);
     }
 }
 
-fn handle_match_input(engine: &mut Engine, state: &mut MatchState) {
+fn handle_match_input(engine: &mut Engine, _: &mut MatchState) {
     for mouse_event in &engine.mouse_button_events {
         println!("{:?}", mouse_event);
     }
