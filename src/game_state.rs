@@ -1,5 +1,7 @@
 use rusty_engine::prelude::*;
 
+use crate::match_state::{FigureColor, MatchState};
+
 
 pub struct LobbyState {
 
@@ -11,15 +13,7 @@ impl LobbyState {
     }
 }
 
-pub struct MatchState {
 
-}
-
-impl MatchState {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
 
 #[derive(Resource)]
 pub enum GameState {
@@ -29,6 +23,6 @@ pub enum GameState {
 
 impl GameState {
     pub fn new() -> Self {
-        Self::Lobby( LobbyState {  } )
+        Self::Match( MatchState::new(FigureColor::White) )
     }
 }
