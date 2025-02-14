@@ -1,6 +1,4 @@
-pub struct LobbyState {
-
-}
+pub struct LobbyState {}
 
 impl LobbyState {
     pub fn new() -> Self {

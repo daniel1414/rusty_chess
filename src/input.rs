@@ -1,6 +1,8 @@
 use rusty_engine::prelude::*;
 
-use crate::{game_state::GameState, game_match::match_state::MatchState, game_lobby::lobby_state::LobbyState};
+use crate::{
+    game_lobby::lobby_state::LobbyState, game_match::match_state::MatchState, game_state::GameState,
+};
 
 pub fn handle_input(engine: &mut Engine, state: &mut GameState) {
     match state {
