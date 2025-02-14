@@ -243,8 +243,8 @@ impl MatchState {
         }
 
         Self {
-            player_color: player_color,
-            board: board,
+            player_color,
+            board,
         }
     }
 }

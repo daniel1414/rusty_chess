@@ -5,3 +5,9 @@ impl LobbyState {
         Self {}
     }
 }
+
+impl Default for LobbyState {
+    fn default() -> Self {
+        Self {}
+    }
+}

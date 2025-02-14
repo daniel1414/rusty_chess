@@ -82,3 +82,9 @@ impl GameState {
         }
     }
 }
+
+impl Default for GameState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
