@@ -100,9 +100,10 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
         }
     }
 
-    if let (Some(figure), Some(location)) =
-        (match_state.selected_piece, engine.mouse_state.location())
-    {
+    if let (Some(figure), Some(location)) = (
+        match_state.selected_piece.as_ref(),
+        engine.mouse_state.location(),
+    ) {
         let offset = location;
         let sprite = engine.add_sprite(
             figure.label.to_string(),
@@ -110,7 +111,7 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
         );
         sprite.scale = FIGURE_SCALE;
         sprite.translation = offset;
-        sprite.layer = 1.0;
+        sprite.layer = 2.0;
     }
 
     match_state.is_dirty = false;

@@ -25,13 +25,20 @@ fn handle_match_input(engine: &mut Engine, match_state: &mut MatchState) {
         if let Some(location) = engine.mouse_state.location() {
             if is_pixel_on_board(location) {
                 let pos = pixel_to_square(location);
-                dbg!(&pos);
                 let index = pos.to_index();
-                match match_state.board.get_mut(index) {
-                    Some(figure) => match_state.selected_piece = figure.take(),
+                let figure = match_state.board.get_mut(index).unwrap();
+                match figure {
+                    Some(figure) => {
+                        println!("Selected {:?}", figure);
+                        if match_state.selected_piece.is_none() {
+                            match_state.selected_piece = match_state.board[index].take();
+                        }
+                    }
                     None => {
+                        println!("Clicked empty square");
                         if match_state.selected_piece.is_some() {
                             match_state.board[index] = match_state.selected_piece.take();
+                            dbg!(match_state.board[index]);
                         }
                     }
                 }

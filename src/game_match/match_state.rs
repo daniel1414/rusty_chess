@@ -89,14 +89,14 @@ impl MatchState {
                 "white_bishop1",
             )),
             Some(ColoredFigure::new(
-                Figure::King,
-                PlayerColor::White,
-                "white_king1",
-            )),
-            Some(ColoredFigure::new(
                 Figure::Queen,
                 PlayerColor::White,
                 "white_queen1",
+            )),
+            Some(ColoredFigure::new(
+                Figure::King,
+                PlayerColor::White,
+                "white_king1",
             )),
             Some(ColoredFigure::new(
                 Figure::Bishop,
@@ -245,14 +245,14 @@ impl MatchState {
                 "black_bishop1",
             )),
             Some(ColoredFigure::new(
-                Figure::King,
-                PlayerColor::Black,
-                "black_king1",
-            )),
-            Some(ColoredFigure::new(
                 Figure::Queen,
                 PlayerColor::Black,
                 "black_queen1",
+            )),
+            Some(ColoredFigure::new(
+                Figure::King,
+                PlayerColor::Black,
+                "black_king1",
             )),
             Some(ColoredFigure::new(
                 Figure::Bishop,
