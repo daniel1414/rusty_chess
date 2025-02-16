@@ -5,7 +5,7 @@ use rusty_engine::prelude::*;
 
 use crate::{
     game_lobby::lobby_state::LobbyState,
-    game_match::match_state::{MatchState, PlayerColor},
+    game_match::match_state::{MatchState, PlayerColor, SquarePosition},
     game_state::GameState,
 };
 
@@ -29,10 +29,11 @@ pub fn is_pixel_on_board(mut pos: Vec2) -> bool {
     (pos.x > 0.0 && pos.x < 8.0 * SQUARE_SIZE) && (pos.y > 0.0 && pos.y < 8.0 * SQUARE_SIZE)
 }
 
-pub fn pixel_to_square(mut pos: Vec2) -> (u8, u8) {
+pub fn pixel_to_square(mut pos: Vec2) -> SquarePosition {
     pos -= BOARD_OFFSET + FIGURE_SHIFT_FROM_CENTER - 37.5;
     pos /= SQUARE_SIZE;
-    (pos.x as u8, (8.0 - pos.y) as u8)
+
+    SquarePosition::new(pos.x as u8, pos.y as u8)
 }
 
 fn square_to_pixel(pos: (u8, u8)) -> Vec2 {
@@ -86,12 +87,9 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
 
     for i in 0..match_state.board.len() {
         if let Some(figure) = match_state.board[i] {
-            let x = (i % 8) as f32;
-            let y = (i / 8) as f32;
-            let offset = (vec2((x) * SQUARE_SIZE, (y) * SQUARE_SIZE))
-                + FIGURE_SHIFT_FROM_CENTER
-                + BOARD_OFFSET;
-            let offset = square_to_pixel((x as u8, y as u8));
+            let x = (i % 8) as u8;
+            let y = (i / 8) as u8;
+            let offset = square_to_pixel((x, y));
             let sprite = engine.add_sprite(
                 figure.label.to_string(),
                 base_path.join(figure.label[0..figure.label.len() - 1].to_string() + ".png"),
@@ -100,6 +98,19 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
             sprite.translation = offset;
             sprite.layer = 1.0;
         }
+    }
+
+    if let (Some(figure), Some(location)) =
+        (match_state.selected_piece, engine.mouse_state.location())
+    {
+        let offset = location;
+        let sprite = engine.add_sprite(
+            figure.label.to_string(),
+            base_path.join(figure.label[0..figure.label.len() - 1].to_string() + ".png"),
+        );
+        sprite.scale = FIGURE_SCALE;
+        sprite.translation = offset;
+        sprite.layer = 1.0;
     }
 
     match_state.is_dirty = false;

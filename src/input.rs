@@ -20,27 +20,27 @@ fn handle_lobby_input(engine: &mut Engine, _: &mut LobbyState) {
     }
 }
 
-fn handle_match_input(engine: &mut Engine, _: &mut MatchState) {
-    for mouse_event in &engine.mouse_button_events {
-        match mouse_event {
-            MouseButtonInput {
-                button,
-                state,
-                window,
-            } => match button {
-                MouseButton::Left => {
-                    if engine.mouse_state.pressed(MouseButton::Left) {
-                        if let Some(location) = engine.mouse_state.location() {
-                            if is_pixel_on_board(location) {
-                                print!("{:?} {:?} {:?}\n", button, state, window);
-                                println!("{:?}", engine.mouse_state.location());
-                                println!("{:?}", pixel_to_square(location));
-                            }
+fn handle_match_input(engine: &mut Engine, match_state: &mut MatchState) {
+    if engine.mouse_state.just_pressed(MouseButton::Left) {
+        if let Some(location) = engine.mouse_state.location() {
+            if is_pixel_on_board(location) {
+                let pos = pixel_to_square(location);
+                dbg!(&pos);
+                let index = pos.to_index();
+                match match_state.board.get_mut(index) {
+                    Some(figure) => match_state.selected_piece = figure.take(),
+                    None => {
+                        if match_state.selected_piece.is_some() {
+                            match_state.board[index] = match_state.selected_piece.take();
                         }
                     }
                 }
-                _ => {}
-            },
+                match_state.is_dirty = true;
+            }
         }
+    }
+
+    if match_state.selected_piece.is_some() && engine.mouse_location_events.len() > 0 {
+        match_state.is_dirty = true;
     }
 }
