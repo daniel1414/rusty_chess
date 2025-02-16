@@ -133,6 +133,7 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
             i += 1;
         }
     } else {
+        // TODO: Need to store the labels in use for future removal.
         engine.sprites.remove_entry("possible_move0");
         engine.sprites.remove_entry("possible_move1");
         engine.sprites.remove_entry("possible_move2");
