@@ -1,3 +1,4 @@
+/// Represents a chess figure.
 #[derive(Copy, Clone, Debug)]
 pub enum Figure {
     Pawn,
@@ -8,12 +9,14 @@ pub enum Figure {
     King,
 }
 
+/// Represents a player's color.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum PlayerColor {
     White,
     Black,
 }
 
+/// Represents a colored chess figure.
 #[derive(Copy, Clone, Debug)]
 pub struct ColoredFigure {
     pub figure: Figure,
@@ -31,12 +34,26 @@ impl ColoredFigure {
     }
 }
 
+/// Represents the state of a chess match.
 pub struct MatchState {
+    /// Color of the player that is playing the whole match.
     pub player_color: PlayerColor,
+
+    /// Representation of the board. On every square there can be one figure.
     pub board: [Option<ColoredFigure>; 64],
+
+    /// Current turn.
+    pub turn: PlayerColor,
+
+    /// Currently selected figure.
+    pub selected_piece: Option<ColoredFigure>,
+
+    /// Whether to re-render the board.
+    pub is_dirty: bool,
 }
 
 impl MatchState {
+    // Creates a new match state, depending on the player's color.
     pub fn new(player_color: PlayerColor) -> Self {
         let mut board: [Option<ColoredFigure>; 64] = [
             // First row
@@ -245,6 +262,9 @@ impl MatchState {
         Self {
             player_color,
             board,
+            turn: PlayerColor::White,
+            selected_piece: None,
+            is_dirty: true,
         }
     }
 }

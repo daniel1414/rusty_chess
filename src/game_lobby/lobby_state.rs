@@ -1,3 +1,4 @@
+// Represents the state of the lobby.
 pub struct LobbyState {}
 
 impl LobbyState {
