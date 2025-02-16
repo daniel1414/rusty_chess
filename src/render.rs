@@ -85,8 +85,9 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
         return;
     }
 
-    for i in 0..match_state.board.len() {
-        if let Some(figure) = match_state.board[i] {
+    // Draw all pieces.
+    for i in 0..match_state.board.squares.len() {
+        if let Some(figure) = match_state.board.squares[i] {
             let x = (i % 8) as u8;
             let y = (i / 8) as u8;
             let offset = square_to_pixel((x, y));
@@ -100,10 +101,12 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
         }
     }
 
-    if let (Some(figure), Some(location)) = (
+    // Draw selected piece.
+    if let (Some(pos_figure), Some(location)) = (
         match_state.selected_piece.as_ref(),
         engine.mouse_state.location(),
     ) {
+        let figure = pos_figure.col_figure;
         let offset = location;
         let sprite = engine.add_sprite(
             figure.label.to_string(),
@@ -112,6 +115,29 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
         sprite.scale = FIGURE_SCALE;
         sprite.translation = offset;
         sprite.layer = 2.0;
+    }
+
+    // Draw all possible moves.
+
+    if !match_state.available_moves.is_empty() {
+        let mut i = 0;
+        for pos in match_state.available_moves.iter() {
+            let sprite = engine.add_sprite(
+                format!("possible_move{}", i),
+                base_path.join("possible_move.png"),
+            );
+            sprite.scale = FIGURE_SCALE * 0.75;
+            sprite.translation = square_to_pixel((pos.x, pos.y));
+            sprite.layer = 0.9;
+
+            i += 1;
+        }
+    } else {
+        engine.sprites.remove_entry("possible_move0");
+        engine.sprites.remove_entry("possible_move1");
+        engine.sprites.remove_entry("possible_move2");
+        engine.sprites.remove_entry("possible_move3");
+        engine.sprites.remove_entry("possible_move4");
     }
 
     match_state.is_dirty = false;

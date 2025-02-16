@@ -1,3 +1,7 @@
+use rusty_engine::prelude::bevy::utils::hashbrown::HashSet;
+
+use super::board::Board;
+
 /// Represents a chess figure.
 #[derive(Copy, Clone, Debug)]
 pub enum Figure {
@@ -34,10 +38,10 @@ impl ColoredFigure {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Hash, Copy, Clone)]
 pub struct SquarePosition {
-    x: u8,
-    y: u8,
+    pub x: u8,
+    pub y: u8,
 }
 
 impl SquarePosition {
@@ -48,6 +52,35 @@ impl SquarePosition {
     pub fn to_index(&self) -> usize {
         (self.y * 8 + self.x) as usize
     }
+
+    pub fn add(&self, x: u8, y: u8) -> Self {
+        Self::new(self.x + x, self.y + y)
+    }
+
+    pub fn try_add(&self, x: i8, y: i8) -> Option<Self> {
+        let new_x = self.x as i8 + x;
+        let new_y = self.y as i8 + y;
+        if new_x < 0 || new_x > 7 || new_y < 0 || new_y > 7 {
+            None
+        } else {
+            Some(SquarePosition::new(new_x as u8, new_y as u8))
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct PositionedFigure {
+    pub col_figure: ColoredFigure,
+    pub position: SquarePosition,
+}
+
+impl PositionedFigure {
+    pub fn new(figure: ColoredFigure, position: SquarePosition) -> Self {
+        Self {
+            col_figure: figure,
+            position,
+        }
+    }
 }
 
 /// Represents the state of a chess match.
@@ -56,13 +89,16 @@ pub struct MatchState {
     pub player_color: PlayerColor,
 
     /// Representation of the board. On every square there can be one figure.
-    pub board: [Option<ColoredFigure>; 64],
+    pub board: Board,
 
     /// Current turn.
     pub turn: PlayerColor,
 
     /// Currently selected figure.
-    pub selected_piece: Option<ColoredFigure>,
+    pub selected_piece: Option<PositionedFigure>,
+
+    /// The squares the current piece can go to.
+    pub available_moves: HashSet<SquarePosition>,
 
     /// Whether to re-render the board.
     pub is_dirty: bool,
@@ -71,216 +107,13 @@ pub struct MatchState {
 impl MatchState {
     // Creates a new match state, depending on the player's color.
     pub fn new(player_color: PlayerColor) -> Self {
-        let mut board: [Option<ColoredFigure>; 64] = [
-            // First row
-            Some(ColoredFigure::new(
-                Figure::Rook,
-                PlayerColor::White,
-                "white_rook1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Knight,
-                PlayerColor::White,
-                "white_knight1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Bishop,
-                PlayerColor::White,
-                "white_bishop1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Queen,
-                PlayerColor::White,
-                "white_queen1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::King,
-                PlayerColor::White,
-                "white_king1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Bishop,
-                PlayerColor::White,
-                "white_bishop2",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Knight,
-                PlayerColor::White,
-                "white_knight2",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Rook,
-                PlayerColor::White,
-                "white_rook2",
-            )),
-            // Second row
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::White,
-                "white_pawn1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::White,
-                "white_pawn2",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::White,
-                "white_pawn3",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::White,
-                "white_pawn4",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::White,
-                "white_pawn5",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::White,
-                "white_pawn6",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::White,
-                "white_pawn7",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::White,
-                "white_pawn8",
-            )),
-            // Third, fourth, fifth and sixth row
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            // Seventh row
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::Black,
-                "black_pawn1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::Black,
-                "black_pawn2",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::Black,
-                "black_pawn3",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::Black,
-                "black_pawn4",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::Black,
-                "black_pawn5",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::Black,
-                "black_pawn6",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::Black,
-                "black_pawn7",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Pawn,
-                PlayerColor::Black,
-                "black_pawn8",
-            )),
-            // Eigth row
-            Some(ColoredFigure::new(
-                Figure::Rook,
-                PlayerColor::Black,
-                "black_rook1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Knight,
-                PlayerColor::Black,
-                "black_knight1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Bishop,
-                PlayerColor::Black,
-                "black_bishop1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Queen,
-                PlayerColor::Black,
-                "black_queen1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::King,
-                PlayerColor::Black,
-                "black_king1",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Bishop,
-                PlayerColor::Black,
-                "black_bishop2",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Knight,
-                PlayerColor::Black,
-                "black_knight2",
-            )),
-            Some(ColoredFigure::new(
-                Figure::Rook,
-                PlayerColor::Black,
-                "black_rook2",
-            )),
-        ];
-
-        if player_color == PlayerColor::Black {
-            board.reverse();
-        }
-
         Self {
             player_color,
-            board,
+            board: Board::new(player_color),
             turn: PlayerColor::White,
             selected_piece: None,
             is_dirty: true,
+            available_moves: HashSet::new(),
         }
     }
 }

@@ -2,7 +2,10 @@ use rusty_engine::prelude::*;
 
 use crate::{
     game_lobby::lobby_state::LobbyState,
-    game_match::match_state::MatchState,
+    game_match::{
+        logic::update_available_moves,
+        match_state::{MatchState, PositionedFigure},
+    },
     game_state::GameState,
     render::{is_pixel_on_board, pixel_to_square},
 };
@@ -26,28 +29,34 @@ fn handle_match_input(engine: &mut Engine, match_state: &mut MatchState) {
             if is_pixel_on_board(location) {
                 let pos = pixel_to_square(location);
                 let index = pos.to_index();
-                let figure = match_state.board.get_mut(index).unwrap();
-                match figure {
+                match match_state.board.squares.get_mut(index).unwrap() {
                     Some(figure) => {
-                        println!("Selected {:?}", figure);
-                        if match_state.selected_piece.is_none() {
-                            match_state.selected_piece = match_state.board[index].take();
+                        if match_state.selected_piece.is_none()
+                            && figure.color == match_state.player_color
+                        {
+                            // The player selected a chess piece.
+                            match_state.selected_piece = Some(PositionedFigure::new(
+                                match_state.board.get_mut(&pos).take().unwrap(),
+                                pos,
+                            ));
+                            update_available_moves(match_state);
+                            match_state.is_dirty = true;
                         }
                     }
                     None => {
-                        println!("Clicked empty square");
                         if match_state.selected_piece.is_some() {
-                            match_state.board[index] = match_state.selected_piece.take();
-                            dbg!(match_state.board[index]);
+                            match_state.board.squares[index] =
+                                Some(match_state.selected_piece.take().unwrap().col_figure);
+                            update_available_moves(match_state);
+                            match_state.is_dirty = true;
                         }
                     }
                 }
-                match_state.is_dirty = true;
             }
         }
     }
 
-    if match_state.selected_piece.is_some() && engine.mouse_location_events.len() > 0 {
+    if match_state.selected_piece.is_some() && !engine.mouse_location_events.is_empty() {
         match_state.is_dirty = true;
     }
 }

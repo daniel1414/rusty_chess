@@ -1,14 +1,3 @@
 // Represents the state of the lobby.
+#[derive(Default)]
 pub struct LobbyState {}
-
-impl LobbyState {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
-
-impl Default for LobbyState {
-    fn default() -> Self {
-        Self {}
-    }
-}
