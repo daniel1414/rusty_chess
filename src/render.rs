@@ -22,12 +22,27 @@ const SQUARE_SIZE: f32 = 75.0;
 const FIGURE_SHIFT_FROM_CENTER: Vec2 =
     vec2(-(4.0 * SQUARE_SIZE - 37.5), -(4.0 * SQUARE_SIZE - 37.5));
 
-const ASSETS_PATH: &str = "sprite/chess";
+const ASSET_PATH: &str = "sprite/chess";
+
+pub fn is_pixel_on_board(mut pos: Vec2) -> bool {
+    pos -= BOARD_OFFSET + FIGURE_SHIFT_FROM_CENTER - 37.5;
+    (pos.x > 0.0 && pos.x < 8.0 * SQUARE_SIZE) && (pos.y > 0.0 && pos.y < 8.0 * SQUARE_SIZE)
+}
+
+pub fn pixel_to_square(mut pos: Vec2) -> (u8, u8) {
+    pos -= BOARD_OFFSET + FIGURE_SHIFT_FROM_CENTER - 37.5;
+    pos /= SQUARE_SIZE;
+    (pos.x as u8, (8.0 - pos.y) as u8)
+}
+
+fn square_to_pixel(pos: (u8, u8)) -> Vec2 {
+    vec2(pos.0 as f32, pos.1 as f32) * SQUARE_SIZE + BOARD_OFFSET + FIGURE_SHIFT_FROM_CENTER
+}
 
 pub fn on_startup(game: &mut Game<GameState>, game_state: &GameState) {
     // Board frame
     let label = "board_frame";
-    let base_path = Path::new(ASSETS_PATH);
+    let base_path = Path::new(ASSET_PATH);
     let sprite = game.add_sprite(
         label.to_string(),
         base_path.join(label.to_string() + ".png"),
@@ -63,7 +78,7 @@ fn render_lobby(_: &mut Engine, _: &mut LobbyState) {
 }
 
 fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
-    let base_path = Path::new(ASSETS_PATH);
+    let base_path = Path::new(ASSET_PATH);
 
     if !match_state.is_dirty {
         return;
@@ -76,6 +91,7 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
             let offset = (vec2((x) * SQUARE_SIZE, (y) * SQUARE_SIZE))
                 + FIGURE_SHIFT_FROM_CENTER
                 + BOARD_OFFSET;
+            let offset = square_to_pixel((x as u8, y as u8));
             let sprite = engine.add_sprite(
                 figure.label.to_string(),
                 base_path.join(figure.label[0..figure.label.len() - 1].to_string() + ".png"),

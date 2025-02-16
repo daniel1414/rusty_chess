@@ -14,7 +14,7 @@ pub enum GameState {
 
 impl GameState {
     pub fn new() -> Self {
-        Self::Match(MatchState::new(PlayerColor::Black))
+        Self::Match(MatchState::new(PlayerColor::White))
     }
 }
 
