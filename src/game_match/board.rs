@@ -2,7 +2,6 @@ use super::match_state::{ColoredFigure, Figure, PlayerColor, SquarePosition};
 
 pub struct Board {
     pub squares: [Option<ColoredFigure>; 64],
-    index: usize,
 }
 
 impl Board {
@@ -219,26 +218,10 @@ impl Board {
             board.reverse();
         }
 
-        Self {
-            squares: board,
-            index: 0,
-        }
+        Self { squares: board }
     }
 
     pub fn is_valid_pos(pos: &SquarePosition) -> bool {
         pos.x < 8 && pos.y < 8
-    }
-}
-
-impl Iterator for Board {
-    type Item = Option<ColoredFigure>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.index < self.squares.len() {
-            self.index += 1;
-            Some(self.squares[self.index - 1])
-        } else {
-            None
-        }
     }
 }
