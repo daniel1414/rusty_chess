@@ -17,8 +17,8 @@ fn get_available_moves(active_piece: &PositionedFigure, board: &Board) -> HashSe
     let mut available_moves: HashSet<SquarePosition> = HashSet::new();
 
     let pos = &active_piece.position;
-    match active_piece.col_figure.figure {
-        super::match_state::Figure::Pawn => {
+    match active_piece.col_figure.piece {
+        super::match_state::ChessPiece::Pawn => {
             let front_moves = if active_piece.col_figure.color == PlayerColor::White {
                 let mut result = vec![pos.try_add(0, 1)];
                 if pos.y == 1 && board.get(&pos.try_add(0, 1).unwrap()).is_none() {
@@ -51,19 +51,19 @@ fn get_available_moves(active_piece: &PositionedFigure, board: &Board) -> HashSe
                 .for_each(|corner| {
                     let corner = corner.unwrap();
                     if Board::is_valid_pos(&corner) {
-                        if let Some(figure) = board.get(&corner) {
-                            if figure.color == PlayerColor::Black {
+                        if let Some(piece) = board.get(&corner) {
+                            if piece.color == PlayerColor::Black {
                                 available_moves.insert(corner.clone());
                             }
                         }
                     }
                 });
         }
-        super::match_state::Figure::Rook => todo!(),
-        super::match_state::Figure::Bishop => todo!(),
-        super::match_state::Figure::Knight => todo!(),
-        super::match_state::Figure::Queen => todo!(),
-        super::match_state::Figure::King => todo!(),
+        super::match_state::ChessPiece::Rook => todo!(),
+        super::match_state::ChessPiece::Bishop => todo!(),
+        super::match_state::ChessPiece::Knight => todo!(),
+        super::match_state::ChessPiece::Queen => todo!(),
+        super::match_state::ChessPiece::King => todo!(),
     }
 
     available_moves

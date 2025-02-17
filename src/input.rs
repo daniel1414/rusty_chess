@@ -29,9 +29,9 @@ fn handle_match_input(engine: &mut Engine, match_state: &mut MatchState) {
             if is_pixel_on_board(location) {
                 let pos = pixel_to_square(location);
                 match match_state.board.get_mut(&pos) {
-                    Some(figure) => {
+                    Some(piece) => {
                         if match_state.selected_piece.is_none()
-                            && figure.color == match_state.player_color
+                            && piece.color == match_state.player_color
                         {
                             // The player selected a chess piece.
                             match_state.selected_piece = Some(PositionedFigure::new(

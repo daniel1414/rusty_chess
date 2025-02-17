@@ -24,20 +24,20 @@ const BOARD_SCALE: f32 = 0.5;
 /// Offset of the center of the board from the center of the window.
 const BOARD_OFFSET: Vec2 = vec2(120.0, 20.0);
 
-/// Scale of every figure.
-const FIGURE_SCALE: f32 = BOARD_SCALE * 0.5;
+/// Scale of every piece.
+const CHESS_PIECE_SCALE: f32 = BOARD_SCALE * 0.5;
 
 /// Size of a square.
 const SQUARE_SIZE: f32 = (BOARD_SCALE * (BOARD_SIZE as f32)) / 8.0;
 
 /// Scale of the move indicator. A little smaller than the actual chess piece.
-const MOVE_INDICATOR_SCALE: f32 = FIGURE_SCALE * 0.75;
+const MOVE_INDICATOR_SCALE: f32 = CHESS_PIECE_SCALE * 0.75;
 
 /// Size of half a square.
 const SQUARE_HALF_SIZE: f32 = SQUARE_SIZE / 2.0;
 
 /// Shift to the first position on the board - bottom left, as the y axis goes up.
-const FIGURE_SHIFT_FROM_CENTER: Vec2 = vec2(
+const CHESS_PIECE_SHIFT_FROM_CENTER: Vec2 = vec2(
     -(4.0 * SQUARE_SIZE - SQUARE_HALF_SIZE),
     -(4.0 * SQUARE_SIZE - SQUARE_HALF_SIZE),
 );
@@ -55,19 +55,19 @@ const MOVE_INDICATOR_LAYER: f32 = 0.5;
 const ASSET_PATH: &str = "sprite/chess";
 
 pub fn is_pixel_on_board(mut pos: Vec2) -> bool {
-    pos -= BOARD_OFFSET + FIGURE_SHIFT_FROM_CENTER - SQUARE_HALF_SIZE;
+    pos -= BOARD_OFFSET + CHESS_PIECE_SHIFT_FROM_CENTER - SQUARE_HALF_SIZE;
     (pos.x > 0.0 && pos.x < 8.0 * SQUARE_SIZE) && (pos.y > 0.0 && pos.y < 8.0 * SQUARE_SIZE)
 }
 
 pub fn pixel_to_square(mut pos: Vec2) -> SquarePosition {
-    pos -= BOARD_OFFSET + FIGURE_SHIFT_FROM_CENTER - SQUARE_HALF_SIZE;
+    pos -= BOARD_OFFSET + CHESS_PIECE_SHIFT_FROM_CENTER - SQUARE_HALF_SIZE;
     pos /= SQUARE_SIZE;
 
     SquarePosition::new(pos.x as u8, pos.y as u8)
 }
 
 fn square_to_pixel(pos: (u8, u8)) -> Vec2 {
-    vec2(pos.0 as f32, pos.1 as f32) * SQUARE_SIZE + BOARD_OFFSET + FIGURE_SHIFT_FROM_CENTER
+    vec2(pos.0 as f32, pos.1 as f32) * SQUARE_SIZE + BOARD_OFFSET + CHESS_PIECE_SHIFT_FROM_CENTER
 }
 
 pub fn on_startup(game: &mut Game<GameState>, game_state: &GameState) {
@@ -117,15 +117,15 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
 
     // Draw all pieces.
     for i in 0..match_state.board.squares.len() {
-        if let Some(figure) = match_state.board.squares[i] {
+        if let Some(piece) = match_state.board.squares[i] {
             let x = (i % 8) as u8;
             let y = (i / 8) as u8;
             let offset = square_to_pixel((x, y));
             let sprite = engine.add_sprite(
-                figure.label.to_string(),
-                base_path.join(figure.label[0..figure.label.len() - 1].to_string() + ".png"),
+                piece.label.to_string(),
+                base_path.join(piece.label[0..piece.label.len() - 1].to_string() + ".png"),
             );
-            sprite.scale = FIGURE_SCALE;
+            sprite.scale = CHESS_PIECE_SCALE;
             sprite.translation = offset;
             sprite.layer = INACTIVE_CHESS_PIECE_LAYER;
         }
@@ -136,13 +136,13 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
         match_state.selected_piece.as_ref(),
         engine.mouse_state.location(),
     ) {
-        let figure = pos_figure.col_figure;
+        let piece = pos_figure.col_figure;
         let offset = location;
         let sprite = engine.add_sprite(
-            figure.label.to_string(),
-            base_path.join(figure.label[0..figure.label.len() - 1].to_string() + ".png"),
+            piece.label.to_string(),
+            base_path.join(piece.label[0..piece.label.len() - 1].to_string() + ".png"),
         );
-        sprite.scale = FIGURE_SCALE;
+        sprite.scale = CHESS_PIECE_SCALE;
         sprite.translation = offset;
         sprite.layer = ACTIVE_CHESS_PIECE_LAYER;
     }

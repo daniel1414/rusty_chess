@@ -1,5 +1,5 @@
 use super::{
-    match_state::{ColoredFigure, Figure, PlayerColor},
+    match_state::{ChessPiece, ColoredFigure, PlayerColor},
     square::SquarePosition,
 };
 
@@ -20,83 +20,83 @@ impl Board {
         let mut board: [Option<ColoredFigure>; 64] = [
             // First row
             Some(ColoredFigure::new(
-                Figure::Rook,
+                ChessPiece::Rook,
                 PlayerColor::White,
                 "white_rook1",
             )),
             Some(ColoredFigure::new(
-                Figure::Knight,
+                ChessPiece::Knight,
                 PlayerColor::White,
                 "white_knight1",
             )),
             Some(ColoredFigure::new(
-                Figure::Bishop,
+                ChessPiece::Bishop,
                 PlayerColor::White,
                 "white_bishop1",
             )),
             Some(ColoredFigure::new(
-                Figure::Queen,
+                ChessPiece::Queen,
                 PlayerColor::White,
                 "white_queen1",
             )),
             Some(ColoredFigure::new(
-                Figure::King,
+                ChessPiece::King,
                 PlayerColor::White,
                 "white_king1",
             )),
             Some(ColoredFigure::new(
-                Figure::Bishop,
+                ChessPiece::Bishop,
                 PlayerColor::White,
                 "white_bishop2",
             )),
             Some(ColoredFigure::new(
-                Figure::Knight,
+                ChessPiece::Knight,
                 PlayerColor::White,
                 "white_knight2",
             )),
             Some(ColoredFigure::new(
-                Figure::Rook,
+                ChessPiece::Rook,
                 PlayerColor::White,
                 "white_rook2",
             )),
             // Second row
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::White,
                 "white_pawn1",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::White,
                 "white_pawn2",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::White,
                 "white_pawn3",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::White,
                 "white_pawn4",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::White,
                 "white_pawn5",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::White,
                 "white_pawn6",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::White,
                 "white_pawn7",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::White,
                 "white_pawn8",
             )),
@@ -135,83 +135,83 @@ impl Board {
             None,
             // Seventh row
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::Black,
                 "black_pawn1",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::Black,
                 "black_pawn2",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::Black,
                 "black_pawn3",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::Black,
                 "black_pawn4",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::Black,
                 "black_pawn5",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::Black,
                 "black_pawn6",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::Black,
                 "black_pawn7",
             )),
             Some(ColoredFigure::new(
-                Figure::Pawn,
+                ChessPiece::Pawn,
                 PlayerColor::Black,
                 "black_pawn8",
             )),
             // Eigth row
             Some(ColoredFigure::new(
-                Figure::Rook,
+                ChessPiece::Rook,
                 PlayerColor::Black,
                 "black_rook1",
             )),
             Some(ColoredFigure::new(
-                Figure::Knight,
+                ChessPiece::Knight,
                 PlayerColor::Black,
                 "black_knight1",
             )),
             Some(ColoredFigure::new(
-                Figure::Bishop,
+                ChessPiece::Bishop,
                 PlayerColor::Black,
                 "black_bishop1",
             )),
             Some(ColoredFigure::new(
-                Figure::Queen,
+                ChessPiece::Queen,
                 PlayerColor::Black,
                 "black_queen1",
             )),
             Some(ColoredFigure::new(
-                Figure::King,
+                ChessPiece::King,
                 PlayerColor::Black,
                 "black_king1",
             )),
             Some(ColoredFigure::new(
-                Figure::Bishop,
+                ChessPiece::Bishop,
                 PlayerColor::Black,
                 "black_bishop2",
             )),
             Some(ColoredFigure::new(
-                Figure::Knight,
+                ChessPiece::Knight,
                 PlayerColor::Black,
                 "black_knight2",
             )),
             Some(ColoredFigure::new(
-                Figure::Rook,
+                ChessPiece::Rook,
                 PlayerColor::Black,
                 "black_rook2",
             )),
