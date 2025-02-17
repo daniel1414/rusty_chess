@@ -12,28 +12,52 @@ use crate::{
     game_state::GameState,
 };
 
+/// Scale of the board frame sprite.
+const BOARD_FRAME_SCALE: f32 = 0.38;
+
+/// Size of the board in pixels.
+const BOARD_SIZE: u32 = 1200;
+
+/// Scale of the chess board sprite.
+const BOARD_SCALE: f32 = 0.5;
+
 /// Offset of the center of the board from the center of the window.
 const BOARD_OFFSET: Vec2 = vec2(-150.0, 0.0);
 
 /// Scale of every figure.
 const FIGURE_SCALE: f32 = 0.25;
 
-/// Size of a square (precalculated)
-const SQUARE_SIZE: f32 = 75.0;
+/// Size of a square.
+const SQUARE_SIZE: f32 = (BOARD_SCALE * (BOARD_SIZE as f32)) / 8.0;
 
-/// Shift to the first position on the board - top left.
-const FIGURE_SHIFT_FROM_CENTER: Vec2 =
-    vec2(-(4.0 * SQUARE_SIZE - 37.5), -(4.0 * SQUARE_SIZE - 37.5));
+/// Size of half a square.
+const SQUARE_HALF_SIZE: f32 = SQUARE_SIZE / 2.0;
 
+/// Shift to the first position on the board - bottom left, as the y axis goes up.
+const FIGURE_SHIFT_FROM_CENTER: Vec2 = vec2(
+    -(4.0 * SQUARE_SIZE - SQUARE_HALF_SIZE),
+    -(4.0 * SQUARE_SIZE - SQUARE_HALF_SIZE),
+);
+
+/// Layer of the active (selected) chess piece.
+const ACTIVE_CHESS_PIECE_LAYER: f32 = 2.0;
+
+/// Layer of the all the inactive chess pieces (on the board, but not selected).
+const INACTIVE_CHESS_PIECE_LAYER: f32 = 1.0;
+
+/// Layer of the available move indicators.
+const MOVE_INDICATOR_LAYER: f32 = 0.5;
+
+/// Path to chess assets.
 const ASSET_PATH: &str = "sprite/chess";
 
 pub fn is_pixel_on_board(mut pos: Vec2) -> bool {
-    pos -= BOARD_OFFSET + FIGURE_SHIFT_FROM_CENTER - 37.5;
+    pos -= BOARD_OFFSET + FIGURE_SHIFT_FROM_CENTER - SQUARE_HALF_SIZE;
     (pos.x > 0.0 && pos.x < 8.0 * SQUARE_SIZE) && (pos.y > 0.0 && pos.y < 8.0 * SQUARE_SIZE)
 }
 
 pub fn pixel_to_square(mut pos: Vec2) -> SquarePosition {
-    pos -= BOARD_OFFSET + FIGURE_SHIFT_FROM_CENTER - 37.5;
+    pos -= BOARD_OFFSET + FIGURE_SHIFT_FROM_CENTER - SQUARE_HALF_SIZE;
     pos /= SQUARE_SIZE;
 
     SquarePosition::new(pos.x as u8, pos.y as u8)
@@ -51,7 +75,7 @@ pub fn on_startup(game: &mut Game<GameState>, game_state: &GameState) {
         label.to_string(),
         base_path.join(label.to_string() + ".png"),
     );
-    sprite.scale = 0.38;
+    sprite.scale = BOARD_FRAME_SCALE;
     sprite.translation += BOARD_OFFSET;
 
     if let GameState::Match(state) = &game_state {
@@ -66,7 +90,7 @@ pub fn on_startup(game: &mut Game<GameState>, game_state: &GameState) {
         label.to_string(),
         base_path.join(label.to_string() + ".png"),
     );
-    sprite.scale = 0.5;
+    sprite.scale = BOARD_SCALE;
     sprite.translation += BOARD_OFFSET;
 }
 
@@ -100,7 +124,7 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
             );
             sprite.scale = FIGURE_SCALE;
             sprite.translation = offset;
-            sprite.layer = 1.0;
+            sprite.layer = INACTIVE_CHESS_PIECE_LAYER;
         }
     }
 
@@ -117,7 +141,7 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
         );
         sprite.scale = FIGURE_SCALE;
         sprite.translation = offset;
-        sprite.layer = 2.0;
+        sprite.layer = ACTIVE_CHESS_PIECE_LAYER;
     }
 
     // Draw all possible moves.
@@ -131,7 +155,7 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
             );
             sprite.scale = FIGURE_SCALE * 0.75;
             sprite.translation = square_to_pixel((pos.x, pos.y));
-            sprite.layer = 0.9;
+            sprite.layer = MOVE_INDICATOR_LAYER;
 
             i += 1;
         }

@@ -28,8 +28,7 @@ fn handle_match_input(engine: &mut Engine, match_state: &mut MatchState) {
         if let Some(location) = engine.mouse_state.location() {
             if is_pixel_on_board(location) {
                 let pos = pixel_to_square(location);
-                let index = pos.to_index();
-                match match_state.board.squares.get_mut(index).unwrap() {
+                match match_state.board.get_mut(&pos) {
                     Some(figure) => {
                         if match_state.selected_piece.is_none()
                             && figure.color == match_state.player_color
@@ -45,7 +44,7 @@ fn handle_match_input(engine: &mut Engine, match_state: &mut MatchState) {
                     }
                     None => {
                         if match_state.selected_piece.is_some() {
-                            match_state.board.squares[index] =
+                            *match_state.board.get_mut(&pos) =
                                 Some(match_state.selected_piece.take().unwrap().col_figure);
                             update_available_moves(match_state);
                             match_state.is_dirty = true;
