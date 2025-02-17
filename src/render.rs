@@ -5,7 +5,10 @@ use rusty_engine::prelude::*;
 
 use crate::{
     game_lobby::lobby_state::LobbyState,
-    game_match::match_state::{MatchState, PlayerColor, SquarePosition},
+    game_match::{
+        match_state::{MatchState, PlayerColor},
+        square::SquarePosition,
+    },
     game_state::GameState,
 };
 

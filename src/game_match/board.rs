@@ -1,4 +1,7 @@
-use super::match_state::{ColoredFigure, Figure, PlayerColor, SquarePosition};
+use super::{
+    match_state::{ColoredFigure, Figure, PlayerColor},
+    square::SquarePosition,
+};
 
 pub struct Board {
     pub squares: [Option<ColoredFigure>; 64],
