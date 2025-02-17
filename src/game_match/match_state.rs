@@ -1,56 +1,12 @@
 use rusty_engine::prelude::bevy::utils::hashbrown::HashSet;
 
-use super::{board::Board, square::SquarePosition};
-
-/// Represents a chess piece.
-#[derive(Copy, Clone, Debug)]
-pub enum ChessPiece {
-    Pawn,
-    Rook,
-    Bishop,
-    Knight,
-    Queen,
-    King,
-}
+use super::{board::Board, chess_piece::PositionedChessPiece, square::SquarePosition};
 
 /// Represents a player's color.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum PlayerColor {
     White,
     Black,
-}
-
-/// Represents a colored chess piece.
-#[derive(Copy, Clone, Debug)]
-pub struct ColoredFigure {
-    pub piece: ChessPiece,
-    pub color: PlayerColor,
-    pub label: &'static str,
-}
-
-impl ColoredFigure {
-    pub fn new(piece: ChessPiece, color: PlayerColor, label: &'static str) -> Self {
-        Self {
-            piece,
-            color,
-            label,
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct PositionedFigure {
-    pub col_figure: ColoredFigure,
-    pub position: SquarePosition,
-}
-
-impl PositionedFigure {
-    pub fn new(piece: ColoredFigure, position: SquarePosition) -> Self {
-        Self {
-            col_figure: piece,
-            position,
-        }
-    }
 }
 
 /// Represents the state of a chess match.
@@ -65,7 +21,7 @@ pub struct MatchState {
     pub turn: PlayerColor,
 
     /// Currently selected piece.
-    pub selected_piece: Option<PositionedFigure>,
+    pub selected_piece: Option<PositionedChessPiece>,
 
     /// The squares the current piece can go to.
     pub available_moves: HashSet<SquarePosition>,

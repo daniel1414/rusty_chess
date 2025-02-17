@@ -2,7 +2,8 @@ use rusty_engine::prelude::bevy::utils::HashSet;
 
 use super::{
     board::Board,
-    match_state::{MatchState, PlayerColor, PositionedFigure},
+    chess_piece::{ChessPiece, PositionedChessPiece},
+    match_state::{MatchState, PlayerColor},
     square::SquarePosition,
 };
 
@@ -13,12 +14,15 @@ pub fn update_available_moves(match_state: &mut MatchState) {
     }
 }
 
-fn get_available_moves(active_piece: &PositionedFigure, board: &Board) -> HashSet<SquarePosition> {
+fn get_available_moves(
+    active_piece: &PositionedChessPiece,
+    board: &Board,
+) -> HashSet<SquarePosition> {
     let mut available_moves: HashSet<SquarePosition> = HashSet::new();
 
     let pos = &active_piece.position;
     match active_piece.col_figure.piece {
-        super::match_state::ChessPiece::Pawn => {
+        ChessPiece::Pawn => {
             let front_moves = if active_piece.col_figure.color == PlayerColor::White {
                 let mut result = vec![pos.try_add(0, 1)];
                 if pos.y == 1 && board.get(&pos.try_add(0, 1).unwrap()).is_none() {
@@ -59,11 +63,11 @@ fn get_available_moves(active_piece: &PositionedFigure, board: &Board) -> HashSe
                     }
                 });
         }
-        super::match_state::ChessPiece::Rook => todo!(),
-        super::match_state::ChessPiece::Bishop => todo!(),
-        super::match_state::ChessPiece::Knight => todo!(),
-        super::match_state::ChessPiece::Queen => todo!(),
-        super::match_state::ChessPiece::King => todo!(),
+        ChessPiece::Rook => todo!(),
+        ChessPiece::Bishop => todo!(),
+        ChessPiece::Knight => todo!(),
+        ChessPiece::Queen => todo!(),
+        ChessPiece::King => todo!(),
     }
 
     available_moves

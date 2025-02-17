@@ -17,9 +17,3 @@ impl GameState {
         Self::Match(MatchState::new(PlayerColor::White))
     }
 }
-
-impl Default for GameState {
-    fn default() -> Self {
-        Self::new()
-    }
-}

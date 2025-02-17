@@ -54,11 +54,13 @@ const MOVE_INDICATOR_LAYER: f32 = 0.5;
 /// Path to chess assets.
 const ASSET_PATH: &str = "sprite/chess";
 
+/// Determines if a pixel location is a location on the chess board.
 pub fn is_pixel_on_board(mut pos: Vec2) -> bool {
     pos -= BOARD_OFFSET + CHESS_PIECE_SHIFT_FROM_CENTER - SQUARE_HALF_SIZE;
     (pos.x > 0.0 && pos.x < 8.0 * SQUARE_SIZE) && (pos.y > 0.0 && pos.y < 8.0 * SQUARE_SIZE)
 }
 
+/// Converts a pixel location to a board square position.
 pub fn pixel_to_square(mut pos: Vec2) -> SquarePosition {
     pos -= BOARD_OFFSET + CHESS_PIECE_SHIFT_FROM_CENTER - SQUARE_HALF_SIZE;
     pos /= SQUARE_SIZE;
@@ -66,10 +68,12 @@ pub fn pixel_to_square(mut pos: Vec2) -> SquarePosition {
     SquarePosition::new(pos.x as u8, pos.y as u8)
 }
 
+/// Returns the center of a board square position in pixels.
 fn square_to_pixel(pos: (u8, u8)) -> Vec2 {
     vec2(pos.0 as f32, pos.1 as f32) * SQUARE_SIZE + BOARD_OFFSET + CHESS_PIECE_SHIFT_FROM_CENTER
 }
 
+/// Does the initial rendering on app startup.
 pub fn on_startup(game: &mut Game<GameState>, game_state: &GameState) {
     // Board frame
     let label = "board_frame";
@@ -97,6 +101,7 @@ pub fn on_startup(game: &mut Game<GameState>, game_state: &GameState) {
     sprite.translation += BOARD_OFFSET;
 }
 
+/// Renders the game.
 pub fn render(engine: &mut Engine, game_state: &mut GameState) {
     match game_state {
         GameState::Lobby(state) => render_lobby(engine, state),
@@ -104,10 +109,12 @@ pub fn render(engine: &mut Engine, game_state: &mut GameState) {
     }
 }
 
+/// Renders the lobby (NO LOBBY YET)
 fn render_lobby(_: &mut Engine, _: &mut LobbyState) {
     todo!()
 }
 
+/// Renders the match (board, pieces, etc.)
 fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
     let base_path = Path::new(ASSET_PATH);
 
@@ -148,7 +155,6 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
     }
 
     // Draw all possible moves.
-
     if !match_state.available_moves.is_empty() {
         let mut i = 0;
         for pos in match_state.available_moves.iter() {

@@ -21,10 +21,8 @@ fn main() {
     game.run(initial_game_state);
 }
 
+/// Performs the game logic.
 fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
-    // Handle input
     handle_input(engine, game_state);
-
-    // Draw the board
     render(engine, game_state);
 }

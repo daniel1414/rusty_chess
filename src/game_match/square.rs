@@ -1,3 +1,6 @@
+/// Represents a square position on the chess board.
+///
+/// Valid positions range from (0, 0) to (7, 7), which are the bottom left and top right corners respectively.
 #[derive(Debug, PartialEq, Eq, Hash, Copy, Clone)]
 pub struct SquarePosition {
     pub x: u8,
