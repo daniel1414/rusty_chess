@@ -12,23 +12,26 @@ use crate::{
     game_state::GameState,
 };
 
-/// Scale of the board frame sprite.
-const BOARD_FRAME_SCALE: f32 = 0.38;
-
 /// Size of the board in pixels.
 const BOARD_SIZE: u32 = 1200;
+
+/// Scale of the board frame sprite.
+const BOARD_FRAME_SCALE: f32 = 0.38;
 
 /// Scale of the chess board sprite.
 const BOARD_SCALE: f32 = 0.5;
 
 /// Offset of the center of the board from the center of the window.
-const BOARD_OFFSET: Vec2 = vec2(-150.0, 0.0);
+const BOARD_OFFSET: Vec2 = vec2(120.0, 20.0);
 
 /// Scale of every figure.
-const FIGURE_SCALE: f32 = 0.25;
+const FIGURE_SCALE: f32 = BOARD_SCALE * 0.5;
 
 /// Size of a square.
 const SQUARE_SIZE: f32 = (BOARD_SCALE * (BOARD_SIZE as f32)) / 8.0;
+
+/// Scale of the move indicator. A little smaller than the actual chess piece.
+const MOVE_INDICATOR_SCALE: f32 = FIGURE_SCALE * 0.75;
 
 /// Size of half a square.
 const SQUARE_HALF_SIZE: f32 = SQUARE_SIZE / 2.0;
@@ -153,7 +156,7 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
                 format!("possible_move{}", i),
                 base_path.join("possible_move.png"),
             );
-            sprite.scale = FIGURE_SCALE * 0.75;
+            sprite.scale = MOVE_INDICATOR_SCALE;
             sprite.translation = square_to_pixel((pos.x, pos.y));
             sprite.layer = MOVE_INDICATOR_LAYER;
 
