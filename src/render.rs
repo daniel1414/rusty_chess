@@ -177,5 +177,10 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
         engine.sprites.remove_entry("possible_move4");
     }
 
+    // Temporary cleanup
+    for piece in &match_state.board.taken_pieces {
+        engine.sprites.remove_entry(piece.label);
+    }
+
     match_state.is_dirty = false;
 }

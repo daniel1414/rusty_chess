@@ -9,6 +9,15 @@ pub enum PlayerColor {
     Black,
 }
 
+impl PlayerColor {
+    pub fn toggle(&mut self) {
+        match self {
+            PlayerColor::White => *self = Self::Black,
+            PlayerColor::Black => *self = Self::White,
+        }
+    }
+}
+
 /// Represents the state of a chess match.
 pub struct MatchState {
     /// Color of the player that is playing the whole match.

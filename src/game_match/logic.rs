@@ -47,16 +47,20 @@ fn get_available_moves(
                 });
 
             // Check the square to the left and right.
-            let corners = [pos.try_add(-1, 1), pos.try_add(1, 1)];
+            let corners = if active_piece.col_figure.color == PlayerColor::White {
+                [pos.try_add(-1, 1), pos.try_add(1, 1)]
+            } else {
+                [pos.try_add(-1, -1), pos.try_add(1, -1)]
+            };
 
             corners
-                .iter()
+                .into_iter()
                 .filter(|corner| corner.is_some())
                 .for_each(|corner| {
                     let corner = corner.unwrap();
                     if Board::is_valid_pos(&corner) {
                         if let Some(piece) = board.get(&corner) {
-                            if piece.color == PlayerColor::Black {
+                            if piece.color != active_piece.col_figure.color {
                                 available_moves.insert(corner.clone());
                             }
                         }

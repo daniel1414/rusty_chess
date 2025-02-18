@@ -45,7 +45,11 @@ fn handle_match_input(engine: &mut Engine, match_state: &mut MatchState) {
 fn handle_square_pressed(square: SquarePosition, match_state: &mut MatchState) {
     match match_state.board.get_mut(&square) {
         Some(piece) => {
-            if match_state.selected_piece.is_none() && piece.color == match_state.player_color {
+            // Can the player pick the piece up?
+            let is_some_piece_selected = match_state.selected_piece.is_some();
+            let right_piece_color = piece.color == match_state.player_color;
+
+            if !is_some_piece_selected && right_piece_color {
                 // The player selected a chess piece.
                 match_state.selected_piece = Some(PositionedChessPiece::new(
                     match_state.board.get_mut(&square).take().unwrap(),
@@ -53,14 +57,38 @@ fn handle_square_pressed(square: SquarePosition, match_state: &mut MatchState) {
                 ));
                 update_available_moves(match_state);
                 match_state.is_dirty = true;
+            } else if is_some_piece_selected {
+                // Is player trying to take a piece of the enemy?
+                let can_place = match_state.available_moves.contains(&square);
+                if can_place {
+                    // The player placed the selected chess piece.
+                    let dst_square = match_state.board.get_mut(&square);
+                    let piece = dst_square.take();
+                    *dst_square = Some(match_state.selected_piece.take().unwrap().col_figure);
+                    match_state.board.taken_pieces.push(piece.unwrap());
+                    update_available_moves(match_state);
+                    match_state.is_dirty = true;
+                    match_state.player_color.toggle();
+                }
             }
         }
         None => {
             if match_state.selected_piece.is_some() {
-                *match_state.board.get_mut(&square) =
-                    Some(match_state.selected_piece.take().unwrap().col_figure);
-                update_available_moves(match_state);
-                match_state.is_dirty = true;
+                let is_new_position = match_state.available_moves.contains(&square);
+                let is_old_position =
+                    square == match_state.selected_piece.as_ref().unwrap().position;
+                let can_place = is_new_position || is_old_position;
+                if can_place {
+                    // The player placed the selected chess piece.
+                    *match_state.board.get_mut(&square) =
+                        Some(match_state.selected_piece.take().unwrap().col_figure);
+                    update_available_moves(match_state);
+                    match_state.is_dirty = true;
+
+                    if is_new_position {
+                        match_state.player_color.toggle();
+                    }
+                }
             }
         }
     }

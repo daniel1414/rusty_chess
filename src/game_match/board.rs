@@ -6,6 +6,7 @@ use super::{
 
 pub struct Board {
     pub squares: [Option<ColoredChessPiece>; 64],
+    pub taken_pieces: Vec<ColoredChessPiece>,
 }
 
 impl Board {
@@ -222,7 +223,10 @@ impl Board {
             board.reverse();
         }
 
-        Self { squares: board }
+        Self {
+            squares: board,
+            taken_pieces: vec![],
+        }
     }
 
     pub fn is_valid_pos(pos: &SquarePosition) -> bool {
