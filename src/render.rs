@@ -22,7 +22,7 @@ const BOARD_FRAME_SCALE: f32 = 0.38;
 const BOARD_SCALE: f32 = 0.5;
 
 /// Offset of the center of the board from the center of the window.
-const BOARD_OFFSET: Vec2 = vec2(120.0, 20.0);
+const BOARD_OFFSET: Vec2 = vec2(-150.0, 20.0);
 
 /// Scale of every piece.
 const CHESS_PIECE_SCALE: f32 = BOARD_SCALE * 0.5;
