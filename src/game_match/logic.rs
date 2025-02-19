@@ -3,7 +3,7 @@ use rusty_engine::prelude::bevy::utils::HashSet;
 use super::{
     board::Board,
     chess_piece::{ChessPiece, PositionedChessPiece},
-    match_state::{MatchState, PlayerColor},
+    match_state::{self, MatchState, PlayerColor},
     square::SquarePosition,
 };
 
@@ -56,8 +56,8 @@ fn get_available_moves(
             corners
                 .into_iter()
                 .filter(|corner| corner.is_some())
+                .map(|c| c.unwrap())
                 .for_each(|corner| {
-                    let corner = corner.unwrap();
                     if Board::is_valid_pos(&corner) {
                         if let Some(piece) = board.get(&corner) {
                             if piece.color != active_piece.col_figure.color {
@@ -71,7 +71,34 @@ fn get_available_moves(
         ChessPiece::Bishop => todo!(),
         ChessPiece::Knight => todo!(),
         ChessPiece::Queen => todo!(),
-        ChessPiece::King => todo!(),
+        ChessPiece::King => {
+            let moves = [
+                pos.try_add(-1, -1),
+                pos.try_add(0, -1),
+                pos.try_add(1, -1),
+                pos.try_add(-1, 0),
+                pos.try_add(1, 0),
+                pos.try_add(-1, 1),
+                pos.try_add(0, 1),
+                pos.try_add(1, 1),
+            ];
+
+            moves
+                .into_iter()
+                .filter(|s| s.is_some())
+                .for_each(|square| {
+                    if let Some(pos) = square {
+                        match board.get(&pos) {
+                            Some(piece) => {
+                                if piece.color != active_piece.col_figure.color {
+                                    available_moves.insert(pos);
+                                }
+                            }
+                            None => available_moves.insert(pos),
+                        };
+                    }
+                });
+        }
     }
 
     available_moves
