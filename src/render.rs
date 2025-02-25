@@ -154,14 +154,13 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
         sprite.layer = ACTIVE_CHESS_PIECE_LAYER;
     }
 
+    let possible_move_prefix = "possible_move";
     // Draw all possible moves.
     if !match_state.available_moves.is_empty() {
         let mut i = 0;
         for pos in match_state.available_moves.iter() {
-            let sprite = engine.add_sprite(
-                format!("possible_move{}", i),
-                base_path.join("possible_move.png"),
-            );
+            let label = format!("{}{}", possible_move_prefix, i);
+            let sprite = engine.add_sprite(label, base_path.join("possible_move.png"));
             sprite.scale = MOVE_INDICATOR_SCALE;
             sprite.translation = square_to_pixel((pos.x, pos.y));
             sprite.layer = MOVE_INDICATOR_LAYER;
@@ -169,15 +168,12 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
             i += 1;
         }
     } else {
-        // TODO: Need to store the labels in use for future removal.
-        engine.sprites.remove_entry("possible_move0");
-        engine.sprites.remove_entry("possible_move1");
-        engine.sprites.remove_entry("possible_move2");
-        engine.sprites.remove_entry("possible_move3");
-        engine.sprites.remove_entry("possible_move4");
+        engine
+            .sprites
+            .retain(|key, _| !key.starts_with(possible_move_prefix));
     }
 
-    // Temporary cleanup
+    // Temporary cleanup for pieces that have been taken
     for piece in &match_state.board.taken_pieces {
         engine.sprites.remove_entry(piece.label);
     }

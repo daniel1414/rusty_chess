@@ -24,5 +24,6 @@ fn main() {
 /// Performs the game logic.
 fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     handle_input(engine, game_state);
+
     render(engine, game_state);
 }

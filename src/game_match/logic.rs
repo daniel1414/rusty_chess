@@ -3,7 +3,7 @@ use rusty_engine::prelude::bevy::utils::HashSet;
 use super::{
     board::Board,
     chess_piece::{ChessPiece, PositionedChessPiece},
-    match_state::{self, MatchState, PlayerColor},
+    match_state::{MatchState, PlayerColor},
     square::SquarePosition,
 };
 
@@ -94,7 +94,9 @@ fn get_available_moves(
                                     available_moves.insert(pos);
                                 }
                             }
-                            None => available_moves.insert(pos),
+                            None => {
+                                available_moves.insert(pos);
+                            }
                         };
                     }
                 });
