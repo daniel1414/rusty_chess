@@ -20,6 +20,10 @@ fn get_available_moves(
 ) -> HashSet<SquarePosition> {
     let mut available_moves: HashSet<SquarePosition> = HashSet::new();
 
+    if will_move_cause_check(active_piece, board) {
+        return available_moves;
+    }
+
     let pos = &active_piece.position;
     match active_piece.col_figure.piece {
         ChessPiece::Pawn => {
@@ -104,4 +108,14 @@ fn get_available_moves(
     }
 
     available_moves
+}
+
+fn will_move_cause_check(active_piece: &PositionedChessPiece, board: &Board) -> bool {
+    let pos = &active_piece.position;
+    let color = active_piece.col_figure.color;
+
+    let king_pos = board.get_piece_pos(ChessPiece::King, color);
+    println!("King pos: {king_pos:?}");
+
+    false
 }

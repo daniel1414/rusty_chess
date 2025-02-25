@@ -232,4 +232,15 @@ impl Board {
     pub fn is_valid_pos(pos: &SquarePosition) -> bool {
         pos.x < 8 && pos.y < 8
     }
+
+    pub fn get_piece_pos(&self, piece: ChessPiece, color: PlayerColor) -> Option<SquarePosition> {
+        for (index, square) in self.squares.iter().enumerate() {
+            if let Some(colored_piece) = square {
+                if colored_piece.piece == piece && colored_piece.color == color {
+                    return Some(SquarePosition::from_index(index));
+                }
+            }
+        }
+        None
+    }
 }

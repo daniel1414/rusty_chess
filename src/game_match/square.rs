@@ -16,6 +16,10 @@ impl SquarePosition {
         (self.y * 8 + self.x) as usize
     }
 
+    pub fn from_index(index: usize) -> Self {
+        Self::new(index as u8 % 8, index as u8 / 8)
+    }
+
     pub fn add(&self, x: u8, y: u8) -> Self {
         Self::new(self.x + x, self.y + y)
     }

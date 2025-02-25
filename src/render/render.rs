@@ -155,6 +155,7 @@ fn render_match(engine: &mut Engine, match_state: &mut MatchState) {
     }
 
     let possible_move_prefix = "possible_move";
+
     // Draw all possible moves.
     if !match_state.available_moves.is_empty() {
         let mut i = 0;

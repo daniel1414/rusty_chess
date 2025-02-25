@@ -1,4 +1,4 @@
-use render::{on_startup, render};
+use render::render::{on_startup, render};
 use rusty_engine::prelude::*;
 
 pub mod game_lobby;

@@ -1,7 +1,7 @@
 use super::{match_state::PlayerColor, square::SquarePosition};
 
 /// Represents a chess piece.
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum ChessPiece {
     Pawn,
     Rook,

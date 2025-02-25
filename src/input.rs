@@ -7,7 +7,7 @@ use crate::{
         square::SquarePosition,
     },
     game_state::GameState,
-    render::{is_pixel_on_board, pixel_to_square},
+    render::render::{is_pixel_on_board, pixel_to_square},
 };
 
 /// Handles all user input.
